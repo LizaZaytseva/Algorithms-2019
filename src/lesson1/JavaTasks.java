@@ -1,6 +1,13 @@
 package lesson1;
 
+import com.sun.javafx.collections.MappingChange;
+import jdk.nashorn.internal.runtime.regexp.joni.Regex;
 import kotlin.NotImplementedError;
+
+import java.io.*;
+import java.lang.reflect.Array;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
 public class JavaTasks {
@@ -35,8 +42,84 @@ public class JavaTasks {
      * В случае обнаружения неверного формата файла бросить любое исключение.
      */
     static public void sortTimes(String inputName, String outputName) {
-        throw new NotImplementedError();
-    }
+        ArrayList<Integer> list = new ArrayList<>();
+        int j = 0;
+        try {
+            File file = new File(inputName);
+            FileReader fr = new FileReader(file);
+            BufferedReader reader = new BufferedReader(fr);
+            String line = reader.readLine();
+            String str = line.replace(":", "");
+            while (line != null) {
+                j++;
+                String st = line.replace(":", "");
+                if (!(line.matches("(\\d{2}:\\d{2}:\\d{2}\\s(AM|PM))") && (Integer.parseInt(line.split(":")[0]) < 13) &&
+                        (Integer.parseInt(line.split(":")[1]) < 60) && (Integer.parseInt(line.split(":")[0]) < 60)))
+                    throw new Exception("Input file is incorrect");
+                if (st.contains("PM")) {
+                    if (Integer.parseInt(line.split(":")[0]) == 12) {
+                        list.add(Integer.parseInt(st.split(" ")[0]));
+                    }
+                    list.add(Integer.parseInt(st.split(" ")[0]) + 120000);
+                }
+                else  if (Integer.parseInt(line.split(":")[0]) == 12) {
+                    list.add(Integer.parseInt(st.split(" ")[0].substring(2)));
+                }
+                else list.add(Integer.parseInt(st.split(" ")[0]));
+                line = reader.readLine();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Collections.sort(list);
+            try(FileWriter writer = new FileWriter(outputName, false)) {
+                for (int i = 0; i < j; i++) {
+                    String time = "";
+                    int m;
+                    int k = 0;
+                    String stm;
+                    if (list.get(i) > 120000) {
+                        m = list.get(i) - 120000;
+                        k++;
+                    } else {
+                        m = list.get(i);
+                    }
+                    stm = m + "";
+                    if (m < 1000) {
+                        String d = m + "";
+                        while (d.length() < 6) d = "0" + d;
+                        String h = d.substring(0, 2);
+                        String min = d.substring(2, 4);
+                        String s = d.substring(4);
+                        if (k==0) time = "12:" + min + ":" + s + " AM";
+                        else time = "12:" + min + ":" + s + " PM";
+                    } else if (m < 9999){
+                        String min = stm.substring(0, 2);
+                        String s = stm.substring(2);
+                        if (k==0) time = "12:" + min + ":" + s + " AM";
+                        else time ="12:" + min + ":" + s + " PM";
+                    } else if (m > 99999){
+                        String h = stm.substring(0, 2);
+                        String min = stm.substring(2, 4);
+                        String s = stm.substring(4);
+                        if (k==0) time = h + ":" + min + ":" + s + " AM";
+                        else time = h + ":" + min + ":" + s + " PM";
+                    } else{
+                        String h = stm.substring(0, 1);
+                        String min = stm.substring(1, 3);
+                        String s = stm.substring(3);
+                        if (k==0) time = "0" + h + ":" + min + ":" + s + " AM";
+                        else time = "0" + h + ":" + min + ":" + s + " PM";
+                    }
+                    writer.write(time);
+                    writer.write("\n");
+                    if (i == list.size() - 1) writer.close();
+                }
+            }
+            catch(IOException ignored){
+            }
+
+        }
 
     /**
      * Сортировка адресов
@@ -98,11 +181,31 @@ public class JavaTasks {
      * 99.5
      * 121.3
      */
-    static public void sortTemperatures(String inputName, String outputName) {
-        throw new NotImplementedError();
+    static public void sortTemperatures(String inputName, String outputName) throws IOException {
+        ArrayList<Double> list = new ArrayList();
+        try {
+            File file = new File(inputName);
+            FileReader fr = new FileReader(file);
+            BufferedReader reader = new BufferedReader(fr);
+            String line = reader.readLine();
+            while (line != null) {
+                if (line.matches("(-)?\\d+\\.\\d+")) {
+                    list.add(Double.parseDouble(line));
+                } else throw new Exception("Input file is incorrect");
+                line = reader.readLine();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Collections.sort(list);
+            try(FileWriter writer = new FileWriter(outputName, false)) {
+                for (int i = 0; i < list.size(); i++) {
+                writer.write(String.valueOf(list.get(i)));
+                writer.write("\n");
+            }
+        }
     }
-
-    /**
+        /**
      * Сортировка последовательности
      *
      * Средняя
@@ -132,10 +235,53 @@ public class JavaTasks {
      * 2
      */
     static public void sortSequence(String inputName, String outputName) {
-        throw new NotImplementedError();
+        ArrayList<Integer> list = new ArrayList();
+        int min = 0;
+        int maxV = 0;
+        HashMap<Integer, Integer> map = new HashMap<>();
+        try {
+            File file = new File(inputName);
+            FileReader fr = new FileReader(file);
+            BufferedReader reader = new BufferedReader(fr);
+            String line = reader.readLine();
+            while (line != null) {
+                    list.add(Integer.parseInt(line));
+                line = reader.readLine();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        HashMap m = new HashMap();
+        for (int i : list) {
+            if (!m.containsKey(i)) m.put(i, 1);
+            else{
+                int n = Integer.parseInt(m.get(i).toString());
+                m.put(i, n+1);
+            }
+        }
+        for (int i : list) {
+            if ((Integer.parseInt(m.get(i).toString()) > min) || ((Integer.parseInt(m.get(i).toString()) == min) && (i < maxV))) {
+                maxV = i;
+                min = new Integer(m.get(i).toString());
+            }
+        }
+        try(FileWriter writer = new FileWriter(outputName, false)) {
+            for (int i = 0; i < list.size() + min; i++) {
+                if (i >= list.size()) {
+                    String str = maxV + "";
+                    writer.write(str);
+                    writer.write("\n");
+                } else if (list.get(i) != maxV ) {
+                    writer.write(list.get(i).toString());
+                    writer.write("\n");
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    /**
+        /**
      * Соединить два отсортированных массива в один
      *
      * Простая
@@ -150,6 +296,9 @@ public class JavaTasks {
      * Результат: second = [1 3 4 9 9 13 15 20 23 28]
      */
     static <T extends Comparable<T>> void mergeArrays(T[] first, T[] second) {
-        throw new NotImplementedError();
-    }
+        for (int i = 0; i < first.length; i++){
+            second[i] = first[i];
+        }
+        Arrays.sort(second);
+        }
 }

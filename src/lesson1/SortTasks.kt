@@ -2,6 +2,8 @@
 
 package lesson1
 
+import java.io.File
+
 /**
  * Сортировка времён
  *
@@ -32,9 +34,7 @@ package lesson1
  *
  * В случае обнаружения неверного формата файла бросить любое исключение.
  */
-fun sortTimes(inputName: String, outputName: String) {
-    TODO()
-}
+fun sortTimes(inputName: String, outputName: String) { TODO()}
 
 /**
  * Сортировка адресов

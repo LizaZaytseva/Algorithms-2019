@@ -3,6 +3,10 @@ package lesson2;
 import kotlin.NotImplementedError;
 import kotlin.Pair;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.Set;
 
 @SuppressWarnings("unused")
@@ -32,7 +36,32 @@ public class JavaAlgorithms {
      * В случае обнаружения неверного формата файла бросить любое исключение.
      */
     static public Pair<Integer, Integer> optimizeBuyAndSell(String inputName) {
-        throw new NotImplementedError();
+        ArrayList<Integer> list = new ArrayList();
+        Pair<Integer, Integer> pair = new Pair<>(0, 0);
+        try {
+            File file = new File(inputName);
+            FileReader fr = new FileReader(file);
+            BufferedReader reader = new BufferedReader(fr);
+            String line = reader.readLine();
+            while (line != null) {
+                if (line.matches("\\d+")) {
+                    list.add(Integer.parseInt(line));
+                } else throw new Exception("Input file is incorrect");
+                line = reader.readLine();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        int max = 0;
+        for (int i = 0; i < list.size() - 1; i++) {
+            for (int j = i + 1; j < list.size(); j++) {
+                if (list.get(j) - list.get(i) > max) {
+                    max = list.get(j) - list.get(i);
+                    pair = new Pair<>(i+1, j+1);
+                }
+            }
+        }
+        return pair;
     }
 
     /**
@@ -85,7 +114,31 @@ public class JavaAlgorithms {
      * но приветствуется попытка решить её самостоятельно.
      */
     static public int josephTask(int menNumber, int choiceInterval) {
-        throw new NotImplementedError();
+        int n = 1;
+        int sh;
+        ArrayList<Integer> list = new ArrayList();
+        if (choiceInterval == 1) return menNumber;
+        for (int i = 1; i < menNumber + 1; i++) {
+            list.add(i);
+        }
+        sh = choiceInterval - 1;
+        for (int i = 0; i < menNumber - 1; i++) {
+            if (n + sh > list.size()) {
+                if ((n + sh) % list.size() == 0) {
+                    list.remove(n - 1);
+                } else {
+                    list.remove(((n + sh) % list.size()) - 1);
+                    n = (n + sh) % (list.size() + 1);
+                }
+            }else if (n + sh == list.size() ) {
+                list.remove(n + sh - 1);
+                n = 1;
+            } else {
+                list.remove(sh + n - 1);
+                n = n + sh;
+            }
+        }
+        return list.get(0);
     }
 
     /**
@@ -113,8 +166,23 @@ public class JavaAlgorithms {
      * Справка: простым считается число, которое делится нацело только на 1 и на себя.
      * Единица простым числом не считается.
      */
+    private static boolean simple(int num) {
+        if (num % 2 == 0 && num != 2 ) return false;
+        for (int i = 3; i * i <= num; i += 2) {
+            if (num % i == 0) return false;
+        }
+        return true;
+    }
+
     static public int calcPrimesNumber(int limit) {
-        throw new NotImplementedError();
+        int k = 0;
+        if (limit <= 1) return 0;
+        for (int i = 2; i <= limit; i++) {
+            if (simple(i)) {
+                k++;
+            }
+        }
+        return k;
     }
 
     /**
