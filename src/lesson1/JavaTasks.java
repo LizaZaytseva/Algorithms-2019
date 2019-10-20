@@ -42,8 +42,8 @@ public class JavaTasks {
      * В случае обнаружения неверного формата файла бросить любое исключение.
      */
     static public void sortTimes(String inputName, String outputName) {
-        ArrayList<Integer> list = new ArrayList<>();
         int j = 0;
+        ArrayList<Integer> list = new ArrayList<>();
         try {
             File file = new File(inputName);
             FileReader fr = new FileReader(file);
