@@ -42,8 +42,7 @@ public class JavaAlgorithms {
         ArrayList<Integer> list = new ArrayList();
         Pair<Integer, Integer> pair = new Pair<>(0, 0);
         try {
-            File file = new File(inputName);
-            FileReader fr = new FileReader(file);
+            FileReader fr = new FileReader(inputName);
             BufferedReader reader = new BufferedReader(fr);
             String line = reader.readLine();
             while (line != null) {
@@ -156,8 +155,24 @@ public class JavaAlgorithms {
      * вернуть ту из них, которая встречается раньше в строке first.
      */
     static public String longestCommonSubstring(String first, String second) {
-        throw new NotImplementedError();
-    }
+            int max = 0;
+            int res = 0;
+            int[][] str = new int[first.length()][second.length()];
+            for (int i = 0; i < first.length(); i++) {
+                for (int j = 0; j < second.length(); j++) {
+                    if (first.charAt(i) == second.charAt(j)) {
+                        if (i != 0 && j != 0 && str[i - 1][j - 1] != 0) {
+                            str[i][j] = str[i - 1][j - 1] + 1;
+                            if (str[i - 1][j - 1] + 1 > max) {
+                                max = str[i - 1][j - 1] + 1;
+                                res = i + 1;
+                            }
+                        } else str[i][j] = 1;
+                    }
+                }
+            }
+            return first.substring(res - max, res);
+        }
 
     /**
      * Число простых чисел в интервале
