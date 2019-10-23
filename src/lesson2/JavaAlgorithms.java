@@ -46,9 +46,9 @@ public class JavaAlgorithms {
             BufferedReader reader = new BufferedReader(fr);
             String line = reader.readLine();
             while (line != null) {
-                if (line.matches("\\d+")) {
+                //if (line.matches("\\d+")) {
                     list.add(Integer.parseInt(line));
-                } else throw new Exception("Input file is incorrect");
+                //} else throw new Exception("Input file is incorrect");
                 line = reader.readLine();
             }
         } catch (Exception e) {
@@ -114,8 +114,10 @@ public class JavaAlgorithms {
      *
      * Общий комментарий: решение из Википедии для этой задачи принимается,
      * но приветствуется попытка решить её самостоятельно.
-     */
-    static public int josephTask(int menNumber, int choiceInterval) {
+     *
+     *
+     * Пыталась написать сама, тесты в Идее проходит, а в Котоеде падает по времени.
+     * static public int josephTask(int menNumber, int choiceInterval) {
         int n = 1;
         int sh;
         ArrayList<Integer> list = new ArrayList();
@@ -141,6 +143,16 @@ public class JavaAlgorithms {
             }
         }
         return list.get(0);
+    }
+     * Время - O(N), один проход по циклу.
+     * Ресурсозатратность - O(N).
+     */
+    static public int josephTask(int menNumber, int choiceInterval) {
+        int res = 0;
+        for (int i = 1; i <= menNumber; i++) {
+            res = (res + choiceInterval) % i;
+        }
+        return res + 1;
     }
 
     /**
