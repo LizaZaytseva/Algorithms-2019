@@ -40,6 +40,8 @@ public class JavaTasks {
      * 07:56:14 PM
      *
      * В случае обнаружения неверного формата файла бросить любое исключение.
+     * Время -  O(n * log(n)) - сортировка n элементов
+     * Ресурсозатратность O(n) - все данные хранятся в array list, который имеет размер n.
      */
     static public void sortTimes(String inputName, String outputName) {
         int j = 0;
@@ -120,6 +122,7 @@ public class JavaTasks {
             }
 
         }
+        //Память
 
     /**
      * Сортировка адресов
@@ -180,6 +183,8 @@ public class JavaTasks {
      * 24.7
      * 99.5
      * 121.3
+     * Время - O(n * log(n)) - сортировка n элементов.
+     * Ресурсозатратность O(n) - все данные хранятся в array list, который имеет размер n.
      */
     static public void sortTemperatures(String inputName, String outputName) throws IOException {
         ArrayList<Double> list = new ArrayList();
@@ -233,6 +238,8 @@ public class JavaTasks {
      * 2
      * 2
      * 2
+         * Время - O(n * log(n)) - использование метода containsKey и работа цикла.
+         * Ресурсозатратность O(n^2) - все данные хранятся в array list и hash map.
      */
     static public void sortSequence(String inputName, String outputName) {
         ArrayList<Integer> list = new ArrayList();
@@ -294,6 +301,8 @@ public class JavaTasks {
      * second = [null null null null null 1 3 9 13 18 23]
      *
      * Результат: second = [1 3 4 9 9 13 15 20 23 28]
+         *Время - O(n * log(n)) - сортировка n элементов.
+         * Ресурсозатратность O(1) - все данные хранятся в second.
      */
     static <T extends Comparable<T>> void mergeArrays(T[] first, T[] second) {
         for (int i = 0; i < first.length; i++){

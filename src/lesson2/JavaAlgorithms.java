@@ -34,6 +34,9 @@ public class JavaAlgorithms {
      * Например, для приведённого выше файла результат должен быть Pair(3, 4)
      *
      * В случае обнаружения неверного формата файла бросить любое исключение.
+     *
+     * Время -  O(n^(2)) - пары перебираются двойным циклом.
+     * Ресурсозатратность - O(n) - все данные хранятся в array list.
      */
     static public Pair<Integer, Integer> optimizeBuyAndSell(String inputName) {
         ArrayList<Integer> list = new ArrayList();
@@ -152,7 +155,7 @@ public class JavaAlgorithms {
      * Если имеется несколько самых длинных общих подстрок одной длины,
      * вернуть ту из них, которая встречается раньше в строке first.
      */
-    static public String longestCommonSubstring(String firs, String second) {
+    static public String longestCommonSubstring(String first, String second) {
         throw new NotImplementedError();
     }
 
@@ -165,6 +168,10 @@ public class JavaAlgorithms {
      *
      * Справка: простым считается число, которое делится нацело только на 1 и на себя.
      * Единица простым числом не считается.
+     *
+     * Время -  O(n^(3/2)) - вложенный массив только до корня входного числа,
+     * основной массив проходит по всем элементам до входного числа.
+     * Ресурсозатратность -  O(1) - дополнительные переменные не зависят от объема входных данных.
      */
     private static boolean simple(int num) {
         if (num % 2 == 0 && num != 2 ) return false;
