@@ -1,11 +1,8 @@
 package lesson3
 
 import org.junit.jupiter.api.Tag
-import kotlin.test.Test
 import java.util.*
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 class BinaryTreeTest {
     private fun testAdd(create: () -> CheckableSortedSet<Int>) {
@@ -84,6 +81,28 @@ class BinaryTreeTest {
         }
     }
 
+    private fun testRemoveIn(create: () -> CheckableSortedSet<Int>) {
+        val binarySet = create()
+        assertFalse(binarySet.remove(55))
+        assertFalse(binarySet.remove(null))
+        binarySet.add(12);
+        binarySet.add(3);
+        binarySet.add(9999);
+        binarySet.add(41);
+        binarySet.add(515);
+        binarySet.add(122);
+        binarySet.add(4);
+        binarySet.add(79);
+        binarySet.add(91);
+        binarySet.add(5);
+        assertTrue(binarySet.remove(41))
+        assertEquals(9, binarySet.size)
+        assertTrue(binarySet.remove(515))
+        assertFalse(binarySet.remove(111))
+        assertFalse(binarySet.remove(-14))
+        assertFalse(binarySet.remove(1000000))
+    }
+
     @Test
     @Tag("Normal")
     fun testRemoveKotlin() {
@@ -94,6 +113,7 @@ class BinaryTreeTest {
     @Tag("Normal")
     fun testRemoveJava() {
         testRemove { createJavaTree() }
+        testRemoveIn { createJavaTree() }
     }
 
     private fun testIterator(create: () -> CheckableSortedSet<Int>) {
@@ -129,6 +149,28 @@ class BinaryTreeTest {
         }
     }
 
+    private fun testIterator2 (create: () -> CheckableSortedSet<Int>) {
+        val binarySet = create()
+        val binarySet3 = create()
+        binarySet3.add(18)
+        binarySet3.add(56)
+        binarySet3.add(1)
+        binarySet3.add(14)
+        for (i in 0..12) {
+            binarySet += i;
+        }
+        val iterator = binarySet.iterator()
+        val iterator3 = binarySet3.iterator()
+        assertTrue(iterator3.hasNext())
+        assertEquals(4, binarySet3.size)
+        assertTrue(iterator.hasNext())
+        var k = 0
+        while (iterator.hasNext()) {
+            assertEquals(k, iterator.next())
+            k++
+        }
+    }
+
     @Test
     @Tag("Normal")
     fun testIteratorKotlin() {
@@ -139,6 +181,7 @@ class BinaryTreeTest {
     @Tag("Normal")
     fun testIteratorJava() {
         testIterator { createJavaTree() }
+        testIterator2 { createJavaTree() }
     }
 
     private fun testIteratorRemove(create: () -> CheckableSortedSet<Int>) {
