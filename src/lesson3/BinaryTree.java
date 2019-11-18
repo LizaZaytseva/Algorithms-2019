@@ -223,20 +223,23 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
     @Override
     public SortedSet<T> subSet(T fromElement, T toElement) {
         SortedSet<T> res = new TreeSet<>();
-        if (fromElement.compareTo(toElement) <= 0) return searchSubSet(this.root, fromElement, toElement, res);
-        else return res;
+        if (fromElement.compareTo(toElement) <= 0) {
+            return searchSubSet(root, fromElement, toElement, res, true);
+        }
+        return res;
     }
 
-    private SortedSet<T> searchSubSet(Node<T> node, T fromElem, T toElem, SortedSet<T> res) {
+    private SortedSet<T> searchSubSet(Node<T> node, T fromElem, T toElem, SortedSet<T> res, boolean removeLast) {
         int from = node.value.compareTo(fromElem);
         int to = node.value.compareTo(toElem);
         if (from >= 0 && to <= 0) {
             res.add(node.value);
-            if (node.right != null) searchSubSet(node.right, fromElem, toElem, res);
-            if (node.left != null) searchSubSet(node.left, fromElem, toElem, res);
+            if (node.right != null) searchSubSet(node.right, fromElem, toElem, res, false);
+            if (node.left != null) searchSubSet(node.left, fromElem, toElem, res, false);
         }
-        if (to < 0 && node.left != null) searchSubSet(node.left, fromElem, toElem, res);
-        else if (from > 0 && node.right != null) searchSubSet(node.right, fromElem, toElem, res);
+        if (to < 0 && node.left != null) searchSubSet(node.left, fromElem, toElem, res, false);
+        else if (from > 0 && node.right != null) searchSubSet(node.right, fromElem, toElem, res, false);
+        if (removeLast) res.remove(toElem);
         return res;
     }
     /**
@@ -248,9 +251,8 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
     @NotNull
     @Override
     public SortedSet<T> headSet(T toElement) {
-        SortedSet<T> res = subSet(first(), toElement);
-        res.remove(toElement);
-      return res;
+        SortedSet<T> res = new TreeSet<>();
+      return searchSubSet(root,first(), toElement, res, true);
     }
 
     /**
@@ -262,7 +264,8 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
     @NotNull
     @Override
     public SortedSet<T> tailSet(T fromElement) {
-        return subSet(fromElement, last());
+        SortedSet<T> res = new TreeSet<>();
+        return searchSubSet(root, fromElement, last(), res, false);
     }
 
     @Override
